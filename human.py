@@ -1,0 +1,75 @@
+class Human:
+    default_name = 'No name'
+    default_age = '0'
+
+    def __init__(self, name=default_name, age=default_age):
+        self.name = name
+        self.age = age
+        self.__money = 0
+        self.__house = None
+
+    def info(self):
+        print('-------------------')
+        print(f'Name: {self.name}')
+        print(f'Age: {self.age}')
+        print(f'Money: {self.__money}')
+        print(f'House: {self.__house}')
+        print('-------------------')
+
+    @staticmethod
+    def default_info():
+        print(f'Default Name: {Human.default_name}')
+        print(f'Default Age: {Human.default_age}')
+
+    def __make_deal(self, house, price):
+        self.__money -= price
+        self.__house = house
+
+    def earn_money(self, earn):
+        self.__money += earn
+        print(f'Заработанные деньги: {earn}! Текущее состояние: {self.__money}')
+
+    def buy_house(self, house, discount):
+        price = house.final_price(discount)
+        if self.__money >= price:
+            self.__make_deal(house, price)
+        else:
+            print('Не достаточно средств!')
+
+
+class House:
+    def __init__(self, area, price):
+        self._area = area
+        self._price = price
+
+    def final_price(self, discount):
+        final_price = self._price * (100 - discount) / 100
+        print(f'Итоговая стоимость: {final_price}')
+        return final_price
+
+
+# Унаследованный класс
+class SmallHouse(House):
+
+    default_area = 40
+
+    def __init__(self, price):
+        super().__init__(SmallHouse.default_area, price)
+
+if __name__ == '__main__':
+
+    Human.default_info()
+
+    marat = Human('Marat', 42)
+    marat.info()
+
+    small_house = SmallHouse(2_500)
+
+    marat.buy_house(small_house, 5)
+
+    marat.earn_money(5_000)
+    marat.buy_house(small_house, 5)
+
+    marat.earn_money(20_000)
+    marat.buy_house(small_house, 5)
+    marat.info()
